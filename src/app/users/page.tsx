@@ -124,13 +124,13 @@ export default function UsersPage() {
 
       <div className="bg-card border border-border rounded-xl overflow-hidden shadow-sm">
         <table className="w-full">
-          <thead className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-b border-border">
+          <thead className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-border">
             <tr>
               {columns.map((column) => (
                 <th
                   key={column.key}
                   onClick={() => handleSort(column.key)}
-                  className="px-6 py-4 text-left text-sm font-bold text-foreground cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  className="px-6 py-4 text-left text-sm font-bold text-foreground cursor-pointer hover:bg-gray-100 transition-colors"
                 >
                   <div className="flex items-center gap-1">
                     {column.label}
@@ -144,7 +144,7 @@ export default function UsersPage() {
             {paginatedUsers.map((user) => (
               <tr
                 key={user.id}
-                className="hover:bg-gray-50/80 dark:hover:bg-gray-800/50 transition-colors"
+                className="hover:bg-gray-50/80 transition-colors"
               >
                 <td className="px-6 py-4 text-sm font-medium text-muted">
                   #{user.id}

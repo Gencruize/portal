@@ -107,7 +107,7 @@ export default function SubscriptionsPage() {
                       ${plan.revenue.toLocaleString()}
                     </span>
                   </div>
-                  <div className="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-2.5 overflow-hidden">
+                  <div className="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
                     <div
                       className={`h-full rounded-full bg-gradient-to-r ${plan.color} transition-all duration-1000`}
                       style={{
@@ -153,7 +153,7 @@ export default function SubscriptionsPage() {
 
       <div className="bg-card border border-border rounded-xl overflow-hidden shadow-sm">
         <table className="w-full">
-          <thead className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-b border-border">
+          <thead className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-border">
             <tr>
               {["User", "Plan", "Status", "Amount", "Cycle", "Start Date", "Next Billing"].map(
                 (header) => (
@@ -171,7 +171,7 @@ export default function SubscriptionsPage() {
             {paginatedSubscriptions.map((sub) => (
               <tr
                 key={sub.id}
-                className="hover:bg-gray-50/80 dark:hover:bg-gray-800/50 transition-colors"
+                className="hover:bg-gray-50/80 transition-colors"
               >
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">

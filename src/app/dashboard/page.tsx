@@ -39,7 +39,7 @@ export default function DashboardPage() {
             {recentUsers.map((user) => (
               <div
                 key={user.email}
-                className="flex items-center justify-between py-3 px-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border border-transparent hover:border-border"
+                className="flex items-center justify-between py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors border border-transparent hover:border-border"
               >
                 <div className="flex items-center gap-3">
                   <Avatar name={user.name} />
@@ -76,7 +76,7 @@ export default function DashboardPage() {
                     {item.count.toLocaleString()} users
                   </span>
                 </div>
-                <div className="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-3 overflow-hidden">
+                <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
                   <div
                     className={`h-full rounded-full bg-gradient-to-r ${item.color} transition-all duration-1000 ease-out`}
                     style={{ width: `${item.percentage}%` }}
