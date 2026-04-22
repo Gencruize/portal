@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Search, Filter, ChevronDown, ChevronUp } from "lucide-react";
+import { Filter, ChevronDown, ChevronUp } from "lucide-react";
 import { users, userStats } from "@/lib/data";
 import type { UserData } from "@/lib/data";
 import { StatCard } from "@/components/ui/stat-card";
 import { Avatar } from "@/components/ui/avatar";
 import { PlanBadge, UserStatusBadge } from "@/components/ui/badge";
+import { SearchInput } from "@/components/ui/search-input";
 import { Pagination } from "@/components/ui/pagination";
 
 type SortKey = keyof UserData;
@@ -95,19 +96,14 @@ export default function UsersPage() {
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted" />
-          <input
-            type="text"
-            placeholder="Search users..."
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-              setCurrentPage(1);
-            }}
-            className="w-full pl-10 pr-4 py-2.5 bg-card border border-border rounded-lg text-foreground placeholder:text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
-          />
-        </div>
+        <SearchInput
+          placeholder="Search users..."
+          value={searchTerm}
+          onChange={(value) => {
+            setSearchTerm(value);
+            setCurrentPage(1);
+          }}
+        />
         <div className="flex items-center gap-2">
           <Filter className="w-5 h-5 text-muted" />
           <select
@@ -120,8 +116,8 @@ export default function UsersPage() {
           >
             <option value="All">All Plans</option>
             <option value="Starter">Starter</option>
-            <option value="Pro">Pro</option>
-            <option value="Enterprise">Enterprise</option>
+            <option value="Premium">Premium</option>
+            <option value="Sage">Sage</option>
           </select>
         </div>
       </div>

@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Search, DollarSign, Users, Calendar } from "lucide-react";
+import { DollarSign, Users, Calendar } from "lucide-react";
 import { subscriptions, planStats } from "@/lib/data";
 
 import { StatCard } from "@/components/ui/stat-card";
 import { Avatar } from "@/components/ui/avatar";
 import { PlanBadge, SubscriptionStatusBadge } from "@/components/ui/badge";
+import { SearchInput } from "@/components/ui/search-input";
 import { Pagination } from "@/components/ui/pagination";
 
 const ITEMS_PER_PAGE = 5;
@@ -127,19 +128,14 @@ export default function SubscriptionsPage() {
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted" />
-          <input
-            type="text"
-            placeholder="Search subscriptions..."
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-              setCurrentPage(1);
-            }}
-            className="w-full pl-10 pr-4 py-2.5 bg-card border border-border rounded-lg text-foreground placeholder:text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
-          />
-        </div>
+        <SearchInput
+          placeholder="Search subscriptions..."
+          value={searchTerm}
+          onChange={(value) => {
+            setSearchTerm(value);
+            setCurrentPage(1);
+          }}
+        />
         <select
           value={filterStatus}
           onChange={(e) => {

@@ -4,11 +4,9 @@ import type { Plan, UserStatus, SubscriptionStatus } from "@/lib/data";
 // ─── Plan Badges ───
 
 const planStyles: Record<Plan, string> = {
-  Enterprise:
-    "bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950/30 dark:text-purple-300 dark:border-purple-800",
-  Pro: "bg-primary/5 text-primary border-primary/20 dark:bg-primary/10 dark:text-primary dark:border-primary/30",
-  Starter:
-    "bg-gray-50 text-gray-700 border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700",
+  Sage: "bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950/30 dark:text-purple-300 dark:border-purple-800",
+  Premium: "bg-primary/5 text-primary border-primary/20 dark:bg-primary/10 dark:text-primary dark:border-primary/30",
+  Starter: "bg-gray-50 text-gray-700 border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700",
 };
 
 interface PlanBadgeProps {

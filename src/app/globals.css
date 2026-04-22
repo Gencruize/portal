@@ -3,17 +3,17 @@
 :root {
   --background: #ffffff;
   --foreground: #0f172a;
-  --primary: rgb(24 203 150);
-  --primary-dark: rgb(20 170 125);
-  --primary-light: rgb(24 203 150 / 0.1);
+  --primary: #08b27c;
+  --primary-dark: #069468;
+  --primary-light: rgb(8 178 124 / 0.1);
   --card: #ffffff;
   --card-foreground: #0f172a;
   --border: #e2e8f0;
   --muted: #64748b;
   --muted-foreground: #94a3b8;
-  --sidebar-bg: rgb(24 203 150);
+  --sidebar-bg: #08b27c;
   --sidebar-text: #ffffff;
-  --sidebar-hover: rgb(20 170 125);
+  --sidebar-hover: #069468;
 }
 
 @theme inline {
