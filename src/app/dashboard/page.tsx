@@ -6,28 +6,36 @@ const stats = [
     value: "12,847",
     change: "+12.5%",
     icon: Users,
-    trend: "up",
+    color: "from-blue-500/20 to-blue-600/10",
+    iconColor: "text-blue-500",
+    iconBg: "bg-blue-500/10",
   },
   {
     title: "Active Subscriptions",
     value: "3,291",
     change: "+8.2%",
     icon: CreditCard,
-    trend: "up",
+    color: "from-purple-500/20 to-purple-600/10",
+    iconColor: "text-purple-500",
+    iconBg: "bg-purple-500/10",
   },
   {
     title: "Monthly Revenue",
     value: "$48,250",
     change: "+23.1%",
     icon: TrendingUp,
-    trend: "up",
+    color: "from-green-500/20 to-green-600/10",
+    iconColor: "text-green-500",
+    iconBg: "bg-green-500/10",
   },
   {
     title: "Active Sessions",
     value: "1,432",
     change: "+5.7%",
     icon: Activity,
-    trend: "up",
+    color: "from-orange-500/20 to-orange-600/10",
+    iconColor: "text-orange-500",
+    iconBg: "bg-orange-500/10",
   },
 ];
 
@@ -53,33 +61,41 @@ export default function DashboardPage() {
           return (
             <div
               key={stat.title}
-              className="bg-card border border-border rounded-xl p-6 hover:border-primary/50 transition-colors shadow-sm"
+              className={`relative overflow-hidden bg-gradient-to-br ${stat.color} border border-border rounded-xl p-6 hover:shadow-lg hover:scale-[1.02] transition-all duration-300`}
             >
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <Icon className="w-5 h-5 text-primary" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 blur-2xl"></div>
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full -ml-12 -mb-12 blur-xl"></div>
+              
+              <div className="relative">
+                <div className="flex items-center justify-between mb-4">
+                  <div className={`w-12 h-12 rounded-xl ${stat.iconBg} flex items-center justify-center backdrop-blur-sm`}>
+                    <Icon className={`w-6 h-6 ${stat.iconColor}`} />
+                  </div>
+                  <span className="text-sm font-bold text-green-600 bg-green-100 px-2 py-1 rounded-full">{stat.change}</span>
                 </div>
-                <span className="text-sm font-medium text-primary">{stat.change}</span>
+                <p className="text-3xl font-bold text-foreground">{stat.value}</p>
+                <p className="text-sm text-muted mt-1 font-medium">{stat.title}</p>
               </div>
-              <p className="text-2xl font-bold text-foreground">{stat.value}</p>
-              <p className="text-sm text-muted mt-1">{stat.title}</p>
             </div>
           );
         })}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
-          <h2 className="text-lg font-semibold text-foreground mb-4">Recent Users</h2>
-          <div className="space-y-4">
-            {recentUsers.map((user) => (
+        <div className="bg-card border border-border rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-1 h-6 bg-primary rounded-full"></div>
+            <h2 className="text-lg font-semibold text-foreground">Recent Users</h2>
+          </div>
+          <div className="space-y-3">
+            {recentUsers.map((user, index) => (
               <div
                 key={user.email}
-                className="flex items-center justify-between py-3 border-b border-border last:border-0"
+                className="flex items-center justify-between py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors border border-transparent hover:border-border"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <span className="text-sm font-medium text-primary">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-primary/40 flex items-center justify-center shadow-sm">
+                    <span className="text-sm font-bold text-primary">
                       {user.name.split(" ").map((n) => n[0]).join("")}
                     </span>
                   </div>
@@ -89,7 +105,13 @@ export default function DashboardPage() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${
+                    user.plan === "Enterprise" 
+                      ? "bg-purple-100 text-purple-600" 
+                      : user.plan === "Pro"
+                      ? "bg-primary/10 text-primary"
+                      : "bg-gray-100 text-gray-600"
+                  }`}>
                     {user.plan}
                   </span>
                   <p className="text-xs text-muted mt-1">{user.date}</p>
@@ -99,24 +121,33 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
-          <h2 className="text-lg font-semibold text-foreground mb-4">Subscription Distribution</h2>
-          <div className="space-y-4">
+        <div className="bg-card border border-border rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-1 h-6 bg-primary rounded-full"></div>
+            <h2 className="text-lg font-semibold text-foreground">Subscription Distribution</h2>
+          </div>
+          <div className="space-y-5">
             {[
-              { plan: "Starter", count: 5842, percentage: 45, color: "bg-gray-300" },
-              { plan: "Pro", count: 4674, percentage: 36, color: "bg-primary" },
-              { plan: "Enterprise", count: 2331, percentage: 19, color: "bg-primary/60" },
+              { plan: "Starter", count: 5842, percentage: 45, color: "from-gray-400 to-gray-500", bgColor: "bg-gray-400" },
+              { plan: "Pro", count: 4674, percentage: 36, color: "from-primary to-primary-dark", bgColor: "bg-primary" },
+              { plan: "Enterprise", count: 2331, percentage: 19, color: "from-purple-400 to-purple-600", bgColor: "bg-purple-500" },
             ].map((item) => (
-              <div key={item.plan}>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-medium text-foreground">{item.plan}</span>
-                  <span className="text-sm text-muted">{item.count.toLocaleString()} users</span>
+              <div key={item.plan} className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className={`w-3 h-3 rounded-full ${item.bgColor}`}></div>
+                    <span className="font-semibold text-foreground">{item.plan}</span>
+                  </div>
+                  <span className="text-sm font-bold text-muted">{item.count.toLocaleString()} users</span>
                 </div>
-                <div className="w-full bg-gray-100 rounded-full h-2">
+                <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
                   <div
-                    className={`${item.color} h-2 rounded-full transition-all`}
+                    className={`h-full rounded-full bg-gradient-to-r ${item.color} transition-all duration-1000 ease-out`}
                     style={{ width: `${item.percentage}%` }}
                   />
+                </div>
+                <div className="text-right">
+                  <span className="text-xs font-bold text-muted">{item.percentage}%</span>
                 </div>
               </div>
             ))}
@@ -124,8 +155,8 @@ export default function DashboardPage() {
 
           <div className="mt-6 pt-6 border-t border-border">
             <div className="flex items-center justify-between">
-              <span className="text-muted">Total Subscriptions</span>
-              <span className="text-xl font-bold text-foreground">12,847</span>
+              <span className="text-muted font-medium">Total Subscriptions</span>
+              <span className="text-2xl font-bold text-foreground">12,847</span>
             </div>
           </div>
         </div>

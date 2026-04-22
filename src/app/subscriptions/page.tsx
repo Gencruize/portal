@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Calendar, DollarSign, Users } from "lucide-react";
+import { Search, Calendar, DollarSign, Users, TrendingUp, CreditCard } from "lucide-react";
 
 interface Subscription {
   id: number;
@@ -27,10 +27,16 @@ const subscriptions: Subscription[] = [
 ];
 
 const planStats = [
-  { plan: "Starter", subscribers: 5842, revenue: 52578, color: "bg-muted", price: 9 },
-  { plan: "Pro", subscribers: 4674, revenue: 135546, color: "bg-primary", price: 29 },
-  { plan: "Enterprise", subscribers: 2331, revenue: 230769, color: "bg-primary/60", price: 99 },
+  { plan: "Starter", subscribers: 5842, revenue: 52578, color: "from-gray-400 to-gray-500", price: 9, icon: CreditCard },
+  { plan: "Pro", subscribers: 4674, revenue: 135546, color: "from-primary to-primary-dark", price: 29, icon: TrendingUp },
+  { plan: "Enterprise", subscribers: 2331, revenue: 230769, color: "from-purple-400 to-purple-600", price: 99, icon: DollarSign },
 ];
+
+const planColors: Record<string, { bg: string; text: string; border: string }> = {
+  Enterprise: { bg: "bg-purple-50", text: "text-purple-700", border: "border-purple-200" },
+  Pro: { bg: "bg-primary/5", text: "text-primary", border: "border-primary/20" },
+  Starter: { bg: "bg-gray-50", text: "text-gray-700", border: "border-gray-200" },
+};
 
 export default function SubscriptionsPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -55,70 +61,95 @@ export default function SubscriptionsPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-card border border-border rounded-xl p-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-              <DollarSign className="w-5 h-5 text-primary" />
+        <div className="relative overflow-hidden bg-gradient-to-br from-green-500/20 to-green-600/10 border border-border rounded-xl p-6 hover:shadow-lg transition-all">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl"></div>
+          <div className="relative">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-xl bg-green-500/10 flex items-center justify-center backdrop-blur-sm">
+                <DollarSign className="w-6 h-6 text-green-600" />
+              </div>
+              <span className="text-muted font-medium">Total Revenue</span>
             </div>
-            <span className="text-muted">Total Revenue</span>
+            <p className="text-3xl font-bold text-foreground">${totalRevenue.toLocaleString()}</p>
+            <p className="text-sm text-muted mt-1">Monthly recurring revenue</p>
           </div>
-          <p className="text-3xl font-bold text-foreground">${totalRevenue.toLocaleString()}</p>
-          <p className="text-sm text-muted mt-1">Monthly recurring revenue</p>
         </div>
 
-        <div className="bg-card border border-border rounded-xl p-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-              <Users className="w-5 h-5 text-primary" />
+        <div className="relative overflow-hidden bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-border rounded-xl p-6 hover:shadow-lg transition-all">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl"></div>
+          <div className="relative">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center backdrop-blur-sm">
+                <Users className="w-6 h-6 text-blue-600" />
+              </div>
+              <span className="text-muted font-medium">Total Subscribers</span>
             </div>
-            <span className="text-muted">Total Subscribers</span>
+            <p className="text-3xl font-bold text-foreground">{totalSubscribers.toLocaleString()}</p>
+            <p className="text-sm text-muted mt-1">Active subscriptions</p>
           </div>
-          <p className="text-3xl font-bold text-foreground">{totalSubscribers.toLocaleString()}</p>
-          <p className="text-sm text-muted mt-1">Active subscriptions</p>
         </div>
 
-        <div className="bg-card border border-border rounded-xl p-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-              <Calendar className="w-5 h-5 text-primary" />
+        <div className="relative overflow-hidden bg-gradient-to-br from-purple-500/20 to-purple-600/10 border border-border rounded-xl p-6 hover:shadow-lg transition-all">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl"></div>
+          <div className="relative">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center backdrop-blur-sm">
+                <Calendar className="w-6 h-6 text-purple-600" />
+              </div>
+              <span className="text-muted font-medium">Avg. Revenue Per User</span>
             </div>
-            <span className="text-muted">Avg. Revenue Per User</span>
+            <p className="text-3xl font-bold text-foreground">${Math.round(totalRevenue / totalSubscribers)}</p>
+            <p className="text-sm text-muted mt-1">Across all plans</p>
           </div>
-          <p className="text-3xl font-bold text-foreground">${Math.round(totalRevenue / totalSubscribers)}</p>
-          <p className="text-sm text-muted mt-1">Across all plans</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        {planStats.map((plan) => (
-          <div
-            key={plan.plan}
-            className="bg-card border border-border rounded-xl p-6 hover:border-primary/50 transition-colors"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-foreground">{plan.plan}</h3>
-              <span className="text-2xl font-bold text-primary">${plan.price}</span>
+        {planStats.map((plan) => {
+          const Icon = plan.icon;
+          return (
+            <div
+              key={plan.plan}
+              className="relative overflow-hidden bg-card border border-border rounded-xl p-6 hover:shadow-lg hover:scale-[1.02] transition-all duration-300"
+            >
+              <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${plan.color}`}></div>
+              <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br ${plan.color} opacity-10 rounded-full -mr-12 -mt-12 blur-xl"></div>
+              
+              <div className="relative">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${plan.color} flex items-center justify-center shadow-md`}>
+                      <Icon className="w-5 h-5 text-white" />
+                    </div>
+                    <h3 className="text-lg font-bold text-foreground">{plan.plan}</h3>
+                  </div>
+                  <span className={`text-2xl font-bold bg-gradient-to-r ${plan.color} bg-clip-text text-transparent`}>${plan.price}</span>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted">Subscribers</span>
+                    <span className="font-bold text-foreground">{plan.subscribers.toLocaleString()}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted">Revenue</span>
+                    <span className="font-bold text-foreground">${plan.revenue.toLocaleString()}</span>
+                  </div>
+                  <div className="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
+                    <div
+                      className={`h-full rounded-full bg-gradient-to-r ${plan.color} transition-all duration-1000`}
+                      style={{
+                        width: `${(plan.subscribers / totalSubscribers) * 100}%`,
+                      }}
+                    />
+                  </div>
+                  <div className="text-right">
+                    <span className="text-xs font-bold text-muted">{Math.round((plan.subscribers / totalSubscribers) * 100)}%</span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-muted">Subscribers</span>
-                <span className="font-medium text-foreground">{plan.subscribers.toLocaleString()}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-muted">Revenue</span>
-                <span className="font-medium text-foreground">${plan.revenue.toLocaleString()}</span>
-              </div>
-              <div className="w-full bg-background rounded-full h-2 mt-2">
-                <div
-                  className={`${plan.color} h-2 rounded-full`}
-                  style={{
-                    width: `${(plan.subscribers / totalSubscribers) * 100}%`,
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
@@ -129,13 +160,13 @@ export default function SubscriptionsPage() {
             placeholder="Search subscriptions..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-card border border-border rounded-lg text-foreground placeholder:text-muted focus:outline-none focus:border-primary"
+            className="w-full pl-10 pr-4 py-2.5 bg-card border border-border rounded-lg text-foreground placeholder:text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
           />
         </div>
         <select
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
-          className="px-4 py-2.5 bg-card border border-border rounded-lg text-foreground focus:outline-none focus:border-primary"
+          className="px-4 py-2.5 bg-card border border-border rounded-lg text-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
         >
           <option value="All">All Status</option>
           <option value="Active">Active</option>
@@ -144,15 +175,15 @@ export default function SubscriptionsPage() {
         </select>
       </div>
 
-      <div className="bg-card border border-border rounded-xl overflow-hidden">
+      <div className="bg-card border border-border rounded-xl overflow-hidden shadow-sm">
         <table className="w-full">
-          <thead className="bg-background border-b border-border">
+          <thead className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-border">
             <tr>
               {["User", "Plan", "Status", "Amount", "Cycle", "Start Date", "Next Billing"].map(
                 (header) => (
                   <th
                     key={header}
-                    className="px-6 py-4 text-left text-sm font-semibold text-muted"
+                    className="px-6 py-4 text-left text-sm font-bold text-foreground"
                   >
                     {header}
                   </th>
@@ -161,58 +192,58 @@ export default function SubscriptionsPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {filteredSubscriptions.map((sub) => (
-              <tr
-                key={sub.id}
-                className="hover:bg-background/50 transition-colors"
-              >
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                      <span className="text-xs font-medium text-primary">
-                        {sub.user.split(" ").map((n) => n[0]).join("")}
-                      </span>
+            {filteredSubscriptions.map((sub) => {
+              const planStyle = planColors[sub.plan] || planColors.Starter;
+              return (
+                <tr
+                  key={sub.id}
+                  className="hover:bg-gray-50/80 transition-colors"
+                >
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-primary/40 flex items-center justify-center shadow-sm">
+                        <span className="text-sm font-bold text-primary">
+                          {sub.user.split(" ").map((n) => n[0]).join("")}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-foreground">{sub.user}</p>
+                        <p className="text-sm text-muted">{sub.email}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="font-medium text-foreground">{sub.user}</p>
-                      <p className="text-sm text-muted">{sub.email}</p>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  <span
-                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      sub.plan === "Enterprise"
-                        ? "bg-purple-500/10 text-purple-400"
-                        : sub.plan === "Pro"
-                        ? "bg-primary/10 text-primary"
-                        : "bg-muted/10 text-muted"
-                    }`}
-                  >
-                    {sub.plan}
-                  </span>
-                </td>
-                <td className="px-6 py-4">
-                  <span
-                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      sub.status === "Active"
-                        ? "bg-green-500/10 text-green-400"
-                        : sub.status === "Cancelled"
-                        ? "bg-yellow-500/10 text-yellow-400"
-                        : "bg-red-500/10 text-red-400"
-                    }`}
-                  >
-                    {sub.status}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-sm text-foreground font-medium">
-                  ${sub.amount}/{sub.billingCycle.toLowerCase()}
-                </td>
-                <td className="px-6 py-4 text-sm text-muted">{sub.billingCycle}</td>
-                <td className="px-6 py-4 text-sm text-muted">{sub.startDate}</td>
-                <td className="px-6 py-4 text-sm text-muted">{sub.nextBilling}</td>
-              </tr>
-            ))}
+                  </td>
+                  <td className="px-6 py-4">
+                    <span
+                      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border ${planStyle.bg} ${planStyle.text} ${planStyle.border}`}
+                    >
+                      {sub.plan}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span
+                      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${
+                        sub.status === "Active"
+                          ? "bg-green-100 text-green-700 border border-green-200"
+                          : sub.status === "Cancelled"
+                          ? "bg-yellow-100 text-yellow-700 border border-yellow-200"
+                          : "bg-red-100 text-red-700 border border-red-200"
+                      }`}
+                    >
+                      <span className={`w-2 h-2 rounded-full mr-2 ${
+                        sub.status === "Active" ? "bg-green-500" : sub.status === "Cancelled" ? "bg-yellow-500" : "bg-red-500"
+                      }`}></span>
+                      {sub.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-foreground font-bold">
+                    ${sub.amount}/{sub.billingCycle.toLowerCase()}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-muted">{sub.billingCycle}</td>
+                  <td className="px-6 py-4 text-sm text-muted">{sub.startDate}</td>
+                  <td className="px-6 py-4 text-sm text-muted">{sub.nextBilling}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
 
