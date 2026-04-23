@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { DollarSign, Users, Calendar } from "lucide-react";
+import { Users, CreditCard, UserPlus, TrendingUp, AlertTriangle, RefreshCw } from "lucide-react";
 import { subscriptions, planStats } from "@/lib/data";
+import { useSubscriptionsStats } from "@/hooks/useSubscriptionsStats";
 
 import { StatCard } from "@/components/ui/stat-card";
 import { Avatar } from "@/components/ui/avatar";
@@ -13,6 +14,8 @@ import { Pagination } from "@/components/ui/pagination";
 const ITEMS_PER_PAGE = 5;
 
 export default function SubscriptionsPage() {
+  const { data: statsData, loading: statsLoading, error: statsError, refetch } = useSubscriptionsStats();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<string>("All");
   const [currentPage, setCurrentPage] = useState(1);
@@ -44,32 +47,71 @@ export default function SubscriptionsPage() {
         <p className="text-muted mt-1">Manage and monitor all subscriptions</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <StatCard
-          label="Total Revenue"
-          value={`$${totalRevenue.toLocaleString()}`}
-          icon={DollarSign}
-          color="from-green-500/20 to-green-600/10"
-          iconColor="text-green-600"
-          iconBg="bg-green-500/10"
-        />
-        <StatCard
-          label="Total Subscribers"
-          value={totalSubscribers.toLocaleString()}
-          icon={Users}
-          color="from-blue-500/20 to-blue-600/10"
-          iconColor="text-blue-600"
-          iconBg="bg-blue-500/10"
-        />
-        <StatCard
-          label="Avg. Revenue Per User"
-          value={`$${arpu}`}
-          icon={Calendar}
-          color="from-purple-500/20 to-purple-600/10"
-          iconColor="text-purple-600"
-          iconBg="bg-purple-500/10"
-        />
-      </div>
+      {/* Stats from API */}
+      {statsLoading ? (
+        <div className="flex items-center justify-center py-12 mb-8">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-10 h-10 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+            <p className="text-muted text-sm font-medium">Loading stats...</p>
+          </div>
+        </div>
+      ) : statsError ? (
+        <div className="flex items-center justify-center py-8 mb-8">
+          <div className="max-w-md w-full bg-card border border-border rounded-xl p-6 shadow-sm text-center">
+            <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-3">
+              <AlertTriangle className="w-6 h-6 text-red-600" />
+            </div>
+            <h2 className="text-lg font-bold text-foreground mb-1">Failed to load stats</h2>
+            <p className="text-muted mb-4 text-sm">{statsError}</p>
+            <button
+              onClick={refetch}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary-dark transition-colors text-sm"
+            >
+              <RefreshCw className="w-4 h-4" />
+              Try again
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <StatCard
+            label="Total Users"
+            value={statsData?.total_users.toLocaleString() ?? "0"}
+            icon={Users}
+            color="from-blue-500/20 to-blue-600/10"
+            iconColor="text-blue-500"
+            iconBg="bg-blue-500/10"
+            variant="featured"
+          />
+          <StatCard
+            label="Subscribed Users"
+            value={statsData?.subscribed_users.toLocaleString() ?? "0"}
+            icon={CreditCard}
+            color="from-green-500/20 to-green-600/10"
+            iconColor="text-green-500"
+            iconBg="bg-green-500/10"
+            variant="featured"
+          />
+          <StatCard
+            label="Registered Only"
+            value={statsData?.registered_only.toLocaleString() ?? "0"}
+            icon={UserPlus}
+            color="from-orange-500/20 to-orange-600/10"
+            iconColor="text-orange-500"
+            iconBg="bg-orange-500/10"
+            variant="featured"
+          />
+          <StatCard
+            label="Subscription Rate"
+            value={`${statsData?.subscription_rate ?? 0}%`}
+            icon={TrendingUp}
+            color="from-purple-500/20 to-purple-600/10"
+            iconColor="text-purple-500"
+            iconBg="bg-purple-500/10"
+            variant="featured"
+          />
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         {planStats.map((plan) => {

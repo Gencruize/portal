@@ -1,56 +1,13 @@
-import { Users, CreditCard, TrendingUp, Activity, DollarSign, Calendar } from "lucide-react";
+import { CreditCard, TrendingUp, DollarSign, Users, Calendar } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-// ─── Dashboard ───
+// ─── Shared Types ───
 
-export interface DashboardStat {
-  title: string;
-  value: string;
-  change: string;
-  icon: LucideIcon;
-  color: string;
-  iconColor: string;
-  iconBg: string;
-}
+export type Plan = "Starter" | "Premium" | "Sage";
+export type UserStatus = "Active" | "Inactive";
+export type SubscriptionStatus = "Active" | "Cancelled" | "Expired";
 
-export const dashboardStats: DashboardStat[] = [
-  {
-    title: "Total Users",
-    value: "12,847",
-    change: "+12.5%",
-    icon: Users,
-    color: "from-blue-500/20 to-blue-600/10",
-    iconColor: "text-blue-500",
-    iconBg: "bg-blue-500/10",
-  },
-  {
-    title: "Active Subscriptions",
-    value: "3,291",
-    change: "+8.2%",
-    icon: CreditCard,
-    color: "from-purple-500/20 to-purple-600/10",
-    iconColor: "text-purple-500",
-    iconBg: "bg-purple-500/10",
-  },
-  {
-    title: "Monthly Revenue",
-    value: "$48,250",
-    change: "+23.1%",
-    icon: TrendingUp,
-    color: "from-green-500/20 to-green-600/10",
-    iconColor: "text-green-500",
-    iconBg: "bg-green-500/10",
-  },
-  {
-    title: "Active Sessions",
-    value: "1,432",
-    change: "+5.7%",
-    icon: Activity,
-    color: "from-orange-500/20 to-orange-600/10",
-    iconColor: "text-orange-500",
-    iconBg: "bg-orange-500/10",
-  },
-];
+// ─── Recent Users (Dashboard — sample data until endpoint provided) ───
 
 export interface RecentUser {
   name: string;
@@ -67,6 +24,8 @@ export const recentUsers: RecentUser[] = [
   { name: "Lisa Brown", email: "lisa@example.com", plan: "Starter", date: "3 hours ago" },
 ];
 
+// ─── Plan Distribution (Dashboard — sample data until endpoint provided) ───
+
 export interface PlanDistribution {
   plan: Plan;
   count: number;
@@ -81,10 +40,7 @@ export const planDistribution: PlanDistribution[] = [
   { plan: "Sage", count: 2331, percentage: 19, color: "from-purple-400 to-purple-600", bgColor: "bg-purple-500" },
 ];
 
-// ─── Users ───
-
-export type Plan = "Starter" | "Premium" | "Sage";
-export type UserStatus = "Active" | "Inactive";
+// ─── Users Page ───
 
 export interface UserData {
   id: number;
@@ -116,9 +72,7 @@ export const userStats = [
   { label: "Premium Users", value: "4,674", color: "from-primary/20 to-primary/10", iconColor: "text-primary" },
 ];
 
-// ─── Subscriptions ───
-
-export type SubscriptionStatus = "Active" | "Cancelled" | "Expired";
+// ─── Subscriptions Page ───
 
 export interface Subscription {
   id: number;
