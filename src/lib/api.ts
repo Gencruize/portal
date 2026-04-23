@@ -79,7 +79,7 @@ export async function getUsers(): Promise<UsersResponse> {
   throw new Error("getUsers() is a placeholder — endpoint not yet provided");
 }
 
-export async function getUserById(id: number): Promise<unknown> {
+export async function getUserById(_id: number): Promise<unknown> {
   // TODO: Replace with actual endpoint when provided
   throw new Error("getUserById() is a placeholder — endpoint not yet provided");
 }
@@ -102,7 +102,7 @@ export async function getSubscriptions(): Promise<SubscriptionsResponse> {
   throw new Error("getSubscriptions() is a placeholder — endpoint not yet provided");
 }
 
-export async function getSubscriptionById(id: number): Promise<unknown> {
+export async function getSubscriptionById(_id: number): Promise<unknown> {
   // TODO: Replace with actual endpoint when provided
   throw new Error("getSubscriptionById() is a placeholder — endpoint not yet provided");
 }

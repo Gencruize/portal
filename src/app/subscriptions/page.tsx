@@ -30,9 +30,7 @@ export default function SubscriptionsPage() {
     });
   }, [searchTerm, filterStatus]);
 
-  const totalRevenue = planStats.reduce((acc, plan) => acc + plan.revenue, 0);
   const totalSubscribers = planStats.reduce((acc, plan) => acc + plan.subscribers, 0);
-  const arpu = Math.round(totalRevenue / totalSubscribers);
 
   const totalPages = Math.ceil(filteredSubscriptions.length / ITEMS_PER_PAGE);
   const paginatedSubscriptions = filteredSubscriptions.slice(

@@ -10,7 +10,6 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 import { login as apiLogin } from "@/lib/api";
 import {
-  getToken,
   setToken,
   removeToken,
   getUser,
@@ -31,20 +30,10 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUserState] = useState<AuthUser | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUserState] = useState<AuthUser | null>(() => getUser());
+  const [isLoading] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-
-  // Initialize auth state from localStorage on mount
-  useEffect(() => {
-    const token = getToken();
-    const storedUser = getUser();
-    if (token && storedUser) {
-      setUserState(storedUser);
-    }
-    setIsLoading(false);
-  }, []);
 
   // Route guards
   useEffect(() => {
