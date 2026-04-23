@@ -10,7 +10,10 @@ import type {
   LoginResponse,
 } from "./types";
 
-const API_BASE_URL = "https://api-staging.optisage.ai/api";
+const API_BASE_URL =
+  typeof window === "undefined"
+    ? "https://api-staging.optisage.ai/api"
+    : "/api/proxy";
 
 const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,

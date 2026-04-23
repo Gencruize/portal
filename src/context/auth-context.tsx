@@ -29,25 +29,35 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
+function RedirectSpinner({ message }: { message: string }) {
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-background">
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-10 h-10 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+        <p className="text-muted text-sm font-medium">{message}</p>
+      </div>
+    </div>
+  );
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUserState] = useState<AuthUser | null>(() => getUser());
-  const [isLoading] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
 
-  // Route guards
+  const isAuth = !!user;
+  const isLoginPage = pathname === "/login";
+  const needsLoginRedirect = !isAuth && !isLoginPage;
+  const needsDashboardRedirect = isAuth && isLoginPage;
+
+  // Route guards — still trigger the actual navigation
   useEffect(() => {
-    if (isLoading) return;
-
-    const isAuth = !!user;
-    const isLoginPage = pathname === "/login";
-
-    if (!isAuth && !isLoginPage) {
+    if (needsLoginRedirect) {
       router.replace("/login");
-    } else if (isAuth && isLoginPage) {
+    } else if (needsDashboardRedirect) {
       router.replace("/dashboard");
     }
-  }, [isLoading, pathname, user, router]);
+  }, [needsLoginRedirect, needsDashboardRedirect, router]);
 
   const login = useCallback(
     async (email: string, password: string) => {
@@ -70,24 +80,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     router.replace("/login");
   }, [router]);
 
-  const isAuthenticated = !!user;
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-background">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-10 h-10 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
-          <p className="text-muted text-sm font-medium">Loading...</p>
-        </div>
-      </div>
-    );
+  // Block rendering of protected content while redirecting.
+  // This prevents any flash of dashboard / login pages.
+  if (needsLoginRedirect) {
+    return <RedirectSpinner message="Redirecting to login..." />;
   }
 
-  const isLoginPage = pathname === "/login";
+  if (needsDashboardRedirect) {
+    return <RedirectSpinner message="Redirecting to dashboard..." />;
+  }
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, isLoading, login, logout }}
+      value={{ user, isAuthenticated: isAuth, isLoading: false, login, logout }}
     >
       <div className="min-h-full flex bg-background">
         {!isLoginPage && <Sidebar />}
